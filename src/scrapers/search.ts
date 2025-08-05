@@ -23,37 +23,33 @@ export const scrapeSearchedMoviesOrSeries = async (
     $('div.search-wrapper > div.search-item').each((i, el) => {
         const content: cheerio.Cheerio = $(el).find('div.search-content');
         const obj = {} as ISearchedMoviesOrSeries;
-        const genres: string[] = [];
 
-        let type: 'movie' | 'series' = 'movie';
+        let type: 'movies' | 'series' = 'movies';
 
-        $(el)
-            .find('p.cat-links > a')
-            .each((i, el2) => {
-                const x: string[] = $(el2).attr('href')?.split('/') || [];
-
-                if (x[1] === 'genre') genres.push(x[2]);
-                if (x[1] === 'series') type = 'series';
-            });
-
-        const movieId =
-            $(content).find('h2 > a').attr('href')?.split('/').reverse()[1] ||
-            '';
+        const hrefAttr = $(content).find('h3 > a').attr('href');
+        const movieId = hrefAttr ? hrefAttr.replace(/^\/+|\/+$/g, '') : '';
 
         obj['_id'] = movieId;
-        obj['title'] = $(content).find('h2 > a').text();
+
+        obj['title'] = $(content).find('h3 > a').text();
         obj['type'] = type;
+
         obj['posterImg'] = `https://${$(el)
             .find('figure > a > img')
+            .last()
             .attr('src')}`;
         obj['url'] = `${protocol}://${host}/${type}/${movieId}`;
-        obj['genres'] = genres;
+        obj['genres'] = [];
 
         /* eslint-disable */
         $(content)
             .find('p')
             .each((i, el2) => {
                 switch ($(el2).find('strong').text().toLowerCase()) {
+                    case 'genres:':
+                        $(el2).find('strong').remove();
+                        obj['genres'] = $(el2).text().trim().split(', ');
+                        break;
                     case 'sutradara:':
                         $(el2).find('strong').remove();
                         obj['directors'] = $(el2).text().trim().split(', ');
