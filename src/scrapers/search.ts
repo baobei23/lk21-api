@@ -25,13 +25,17 @@ export const scrapeSearchedMoviesOrSeries = async (
         const obj = {} as ISearchedMoviesOrSeries;
 
         let type: 'movies' | 'series' = 'movies';
+        const title = $(content).find('h3 > a').text();
+
+        if (title.toLowerCase().includes('series')) {
+            type = 'series';
+        }
 
         const hrefAttr = $(content).find('h3 > a').attr('href');
         const movieId = hrefAttr ? hrefAttr.replace(/^\/+|\/+$/g, '') : '';
 
         obj['_id'] = movieId;
-
-        obj['title'] = $(content).find('h3 > a').text();
+        obj['title'] = title;
         obj['type'] = type;
 
         obj['posterImg'] = `https://${$(el)
