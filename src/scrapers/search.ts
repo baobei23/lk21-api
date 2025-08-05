@@ -38,7 +38,7 @@ export const scrapeSearchedMoviesOrSeries = async (
         obj['title'] = title;
         obj['type'] = type;
 
-        obj['posterImg'] = `https://${$(el)
+        obj['posterImg'] = `${$(el)
             .find('figure > a > img')
             .last()
             .attr('src')}`;
