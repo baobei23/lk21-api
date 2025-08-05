@@ -49,21 +49,9 @@ export const scrapeSearchedMoviesOrSeries = async (
         $(content)
             .find('p')
             .each((i, el2) => {
-                switch ($(el2).find('strong').text().toLowerCase()) {
-                    case 'genres:':
-                        $(el2).find('strong').remove();
-                        obj['genres'] = $(el2).text().trim().split(', ');
-                        break;
-                    case 'sutradara:':
-                        $(el2).find('strong').remove();
-                        obj['directors'] = $(el2).text().trim().split(', ');
-                        break;
-                    case 'bintang:':
-                        $(el2).find('strong').remove();
-                        obj['casts'] = $(el2).text().trim().split(', ');
-                        break;
-                    default:
-                        break;
+                if ($(el2).find('strong').text().toLowerCase() === 'genres:') {
+                    $(el2).find('strong').remove();
+                    obj['genres'] = $(el2).text().trim().split(', ');
                 }
             });
         /* eslint-enable */
