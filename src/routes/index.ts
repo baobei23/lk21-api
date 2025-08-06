@@ -1,4 +1,5 @@
 import { Router, IRouter } from 'express';
+import { cacheMiddleware } from '../middleware/caching';
 import { streamSeries, streamMovie } from '@/controllers/stream';
 import { moviesByGenre, setOfGenres } from '@/controllers/genre';
 import { moviesByYear, setOfYears } from '@/controllers/year';
@@ -24,6 +25,8 @@ import {
 import { downloadMovie, downloadSeries } from '@/controllers/download';
 
 const router: IRouter = Router();
+
+router.use(cacheMiddleware);
 
 router.get('/movies', latestMovies);
 router.get('/popular/movies', popularMovies);

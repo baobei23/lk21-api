@@ -37,22 +37,20 @@ export const scrapeDownloads = async (
  * Scrape getCookie asynchronously
  * @param {id} string
  */
-export const getCookie = async (id: string) => {
-    try {
-        const headers = {
-            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'Accept-Encoding': 'application/json',
-        };
-        const response = await axios.get(`${process.env.DL_URL}/get/${id}`, {
-            headers: headers,
-        });
-        const data = response.data;
-        const search = "setCookie('validate'";
-        const idx = data.indexOf(search);
-        const hasil = data.substring(idx + 23, idx + 63);
-        const result = 'validate=' + hasil;
-        return result;
-    } catch (error) {
-        throw new Error('failed get cookie');
-    }
+export const getCookie = async (url:string): Promise<string> => {
+	const res = await fetch(url, {
+		method: "GET",
+		redirect: "follow",
+		headers: {
+			"User-Agent":
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+		},
+	});
+
+	if (!res.headers.get("set-cookie")) {
+		throw new Error("failed get cookie");
+	}
+
+	const cookie = res.headers.get("set-cookie")!.split(";")[0];
+	return cookie;
 };
