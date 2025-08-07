@@ -15,9 +15,7 @@ app.use(express.json());
 app.use(morgan('tiny'));
 app.use(cors({ origin: '*' }));
 
-import { apiKeyAuth } from '@/middleware/auth';
-
-app.use(apiKeyAuth, routes);
+app.use(routes);
 
 app.get('/', (req: Request, res: Response) => {
     res.status(200).json({
