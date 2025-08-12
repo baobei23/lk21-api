@@ -1,5 +1,4 @@
-import axios from 'axios';
-import cheerio from 'cheerio';
+import * as cheerio from "cheerio";
 import { Request } from 'express';
 import { IDownloads } from '@/types';
 import { AxiosResponse } from 'axios';
@@ -37,20 +36,20 @@ export const scrapeDownloads = async (
  * Scrape getCookie asynchronously
  * @param {id} string
  */
-export const getCookie = async (url:string): Promise<string> => {
-	const res = await fetch(url, {
-		method: "GET",
-		redirect: "follow",
-		headers: {
-			"User-Agent":
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-		},
-	});
+export const getCookie = async (url: string): Promise<string> => {
+    const res = await fetch(url, {
+        method: "GET",
+        redirect: "follow",
+        headers: {
+            "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+        },
+    });
 
-	if (!res.headers.get("set-cookie")) {
-		throw new Error("failed get cookie");
-	}
+    if (!res.headers.get("set-cookie")) {
+        throw new Error("failed get cookie");
+    }
 
-	const cookie = res.headers.get("set-cookie")!.split(";")[0];
-	return cookie;
+    const cookie = res.headers.get("set-cookie")!.split(";")[0];
+    return cookie;
 };

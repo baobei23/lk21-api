@@ -1,4 +1,4 @@
-import cheerio from 'cheerio';
+import * as cheerio from "cheerio";
 import { AxiosResponse } from 'axios';
 import { Request } from 'express';
 import { ISearchedMoviesOrSeries } from '@/types';

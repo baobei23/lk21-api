@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import cheerio from 'cheerio';
+import * as cheerio from "cheerio";
 import { AxiosResponse } from 'axios';
 import { IMovies, IMovieDetails } from '@/types';
 
